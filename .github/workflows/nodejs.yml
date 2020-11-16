@@ -15,7 +15,4 @@ jobs:
     - run: npm ci
     - run: npm test
       env:
-        CI: true
-        API_URL: https://imdb-internet-movie-database-unofficial.p.rapidapi.com
-        Key: cf1f9e357bmshb1965fc9f8cec9ap1a3aebjsn067152a7b766
-        Host: imdb-internet-movie-database-unofficial.p.rapidapi.com
+        CI: trueu
