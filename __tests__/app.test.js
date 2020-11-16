@@ -72,5 +72,27 @@ describe('Movie-api routes', () => {
       });
     })
   })
+  it('should get an existing instance of the Movie model by the filmRef field', async () => {
+    const agent = request.agent(app);
+    const movieItem = await Movie.create({
+      filmRef: '1',
+      title: 'Tester and the great Jest Test',
+      thumbsUp: 0,
+      thumbsDown: 34,
+    })
+    return agent
+    .get('/api/v1/movies/film/1')
+    .then(res => {
+      expect(res.body).toEqual([{
+        _id: expect.any(String),
+        filmRef: movieItem.filmRef,
+        title: movieItem.title,
+        thumbsUp: movieItem.thumbsUp,
+        thumbsDown: movieItem.thumbsDown,  
+        __v: movieItem.__v
+      }]);
+    })
+  })
+
 
 });

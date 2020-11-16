@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Movie = require('./Movie');
+const Movie = require('../lib/models/Movie');
 
 describe('movie model', () => {
   it('throws an error if the data does not have a filmRef field', () => {
