@@ -103,14 +103,12 @@ describe('Movie-api routes', () => {
       expect({ text: data }).toEqual(searchTermData)
     })
   })
-  it.only('should retrive data by the id from the external api', async () => {
+  it('should retrive data by the id from the external api', async () => {
 
     return request(app)
     .get('/api/v1/movies/film/tt1375666')
     .then(res => {
       const data = JSON.parse(res.body.text)
-      console.log(data.title)
-      console.log(typeof searchIdData.title)
       expect(data).toEqual(searchIdData)
     })
   })
