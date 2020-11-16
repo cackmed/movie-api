@@ -1,13 +1,16 @@
+require('dotenv').config();
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongod = new MongoMemoryServer();
 const mongoose = require('mongoose');
 const connect = require('../lib/utils/connect');
+const searchData = require('./test data/searched-data')
 
 const request = require('supertest');
 const app = require('../lib/app');
 const Movie = require('../lib/models/Movie')
 
 jest.setTimeout(30000);
+
 
 describe('Movie-api routes', () => {
   beforeAll(async() => {
@@ -24,9 +27,8 @@ describe('Movie-api routes', () => {
     return mongod.stop();
   });
   it('should create a new instance of the Movie model', () => {
-    const agent = request.agent(app);
     
-    return agent
+    return request(app)
     .post('/api/v1/movies')
     .send({ 
       filmRef: '1',
@@ -46,14 +48,13 @@ describe('Movie-api routes', () => {
     })
   })
   it('should update a existing instance of the Movie model', async () => {
-    const agent = request.agent(app);
     const movieItem = await Movie.create({
       filmRef: '1',
       title: 'Tester and the great Jest Test',
       thumbsUp: 0,
       thumbsDown: 34,
     })
-    return agent
+    return request(app)
     .patch('/api/v1/movies')
     .send({ 
       filmRef: '1',
@@ -73,15 +74,14 @@ describe('Movie-api routes', () => {
     })
   })
   it('should get an existing instance of the Movie model by the filmRef field', async () => {
-    const agent = request.agent(app);
     const movieItem = await Movie.create({
       filmRef: '1',
       title: 'Tester and the great Jest Test',
       thumbsUp: 0,
       thumbsDown: 34,
     })
-    return agent
-    .get('/api/v1/movies/film/1')
+    return request(app)
+    .get('/api/v1/movies/filmRef/1')
     .then(res => {
       expect(res.body).toEqual([{
         _id: expect.any(String),
@@ -93,6 +93,13 @@ describe('Movie-api routes', () => {
       }]);
     })
   })
+  it('should retrive searched data from external api', async () => {
 
-
+    return request(app)
+    .get('/api/v1/movies/search/inception')
+    .then(res => {
+      const data = JSON.parse(res.body.text)
+      expect({ text: data }).toEqual(searchData)
+    })
+  })
 });
