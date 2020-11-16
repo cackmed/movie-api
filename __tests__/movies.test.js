@@ -3,7 +3,8 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongod = new MongoMemoryServer();
 const mongoose = require('mongoose');
 const connect = require('../lib/utils/connect');
-const searchData = require('./test data/searched-data')
+const searchTermData = require('./test-data/searched-by-term-data.json')
+const searchIdData = require('./test-data/searched-by-id-data.json')
 
 const request = require('supertest');
 const app = require('../lib/app');
@@ -99,7 +100,20 @@ describe('Movie-api routes', () => {
     .get('/api/v1/movies/search/inception')
     .then(res => {
       const data = JSON.parse(res.body.text)
-      expect({ text: data }).toEqual(searchData)
+      expect({ text: data }).toEqual(searchTermData)
+    })
+  })
+  it.only('should retrive data by the id from the external api', async () => {
+
+    return request(app)
+    .get('/api/v1/movies/film/tt1375666')
+    .then(res => {
+      const data = JSON.parse(res.body.text)
+      console.log(data.title)
+      console.log(typeof searchIdData.title)
+      expect(data).toEqual(searchIdData)
     })
   })
 });
+
+
