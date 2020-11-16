@@ -5,6 +5,9 @@ const connect = require('../lib/utils/connect');
 
 const request = require('supertest');
 const app = require('../lib/app');
+const Movie = require('../lib/models/Movie')
+
+jest.setTimeout(30000);
 
 describe('Movie-api routes', () => {
   beforeAll(async() => {
@@ -42,4 +45,32 @@ describe('Movie-api routes', () => {
       });
     })
   })
+  it('should update a existing instance of the Movie model', async () => {
+    const agent = request.agent(app);
+    const movieItem = await Movie.create({
+      filmRef: '1',
+      title: 'Tester and the great Jest Test',
+      thumbsUp: 0,
+      thumbsDown: 34,
+    })
+    return agent
+    .patch('/api/v1/movies')
+    .send({ 
+      filmRef: '1',
+      title: 'Tester and the great Jest Test',
+      thumbsUp: 0,
+      thumbsDown: 54,
+    })
+    .then(res => {
+      expect(res.body).toEqual({
+        _id: expect.any(String),
+        filmRef: movieItem.filmRef,
+        title: movieItem.title,
+        thumbsUp: movieItem.thumbsUp,
+        thumbsDown: 54,  
+        __v: movieItem.__v
+      });
+    })
+  })
+
 });
