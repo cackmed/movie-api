@@ -3,9 +3,6 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongod = new MongoMemoryServer();
 const mongoose = require('mongoose');
 const connect = require('../lib/utils/connect');
-const searchTermData = require('./test-data/searched-by-term-data.json')
-const searchIdData = require('./test-data/searched-by-id-data.json')
-
 const request = require('supertest');
 const app = require('../lib/app');
 const Movie = require('../lib/models/Movie')
@@ -81,6 +78,7 @@ describe('Movie-api routes', () => {
       thumbsUp: 0,
       thumbsDown: 34,
     })
+    console.log('this is a movie item', movieItem)
     return request(app)
     .get('/api/v1/movies/filmRef/1')
     .then(res => {
@@ -94,24 +92,4 @@ describe('Movie-api routes', () => {
       }]);
     })
   })
-  it('should retrive searched data from external api', async () => {
-
-    return request(app)
-    .get('/api/v1/movies/search/inception')
-    .then(res => {
-      const data = JSON.parse(res.body.text)
-      expect({ text: data }).toEqual(searchTermData)
-    })
-  })
-  it('should retrive data by the id from the external api', async () => {
-
-    return request(app)
-    .get('/api/v1/movies/film/tt1375666')
-    .then(res => {
-      const data = JSON.parse(res.body.text)
-      expect(data).toEqual(searchIdData)
-    })
-  })
-});
-
-
+})
