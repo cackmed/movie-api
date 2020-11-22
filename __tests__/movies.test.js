@@ -78,6 +78,7 @@ describe('Movie-api routes', () => {
       thumbsUp: 0,
       thumbsDown: 34,
     })
+    console.log('this is a movie item', movieItem)
     return request(app)
     .get('/api/v1/movies/filmRef/1')
     .then(res => {
