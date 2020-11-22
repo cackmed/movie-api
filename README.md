@@ -16,9 +16,11 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 Search Page:
+
+
 ![search-page](/assets/screen-shot1.png) 
 
-Detail Page
+Detail Page:
 
 ![detail-page](/assets/screen-shot2.png) 
 
